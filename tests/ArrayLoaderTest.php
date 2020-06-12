@@ -4,8 +4,9 @@ namespace Midgard\CreatePHP\tests;
 use Midgard\CreatePHP\Entity\Controller;
 use Midgard\CreatePHP\Entity\Collection;
 use Midgard\CreatePHP\ArrayLoader;
+use PHPUnit\Framework\TestCase;
 
-class ArrayLoaderTest extends \PHPUnit_Framework_TestCase
+class ArrayLoaderTest extends TestCase
 {
     public function test_single_property()
     {

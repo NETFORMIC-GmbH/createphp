@@ -2,8 +2,9 @@
 namespace Midgard\CreatePHP\tests;
 
 use Midgard\CreatePHP\Entity\Controller;
+use PHPUnit\Framework\TestCase;
 
-class ControllerTest extends \PHPUnit_Framework_TestCase
+class ControllerTest extends TestCase
 {
     public function test_get_setVocabulary()
     {

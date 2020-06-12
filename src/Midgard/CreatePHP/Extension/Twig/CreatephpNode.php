@@ -8,15 +8,17 @@
 
 namespace Midgard\CreatePHP\Extension\Twig;
 
-use Twig_Node;
-use Twig_Compiler;
+use Twig\Compiler;
+use Twig\Node\Expression\ConstantExpression;
+use Twig\Node\Expression\NameExpression;
+use Twig\Node\Node;
 
 /**
  * A twig node to render the createphp tag
  *
  * @package Midgard.CreatePHP
  */
-class CreatephpNode extends Twig_Node
+class CreatephpNode extends Node
 {
     /**
      * Constructor.
@@ -33,8 +35,8 @@ class CreatephpNode extends Twig_Node
      * @param string             $tag      The tag name
      */
     public function __construct(
-        Twig_Node $body,
-        Twig_Node $object,
+        Node $body,
+        Node $object,
         $varname,
         $autotag,
         $lineno = 0,
@@ -54,7 +56,7 @@ class CreatephpNode extends Twig_Node
         parent::__construct($nodes, $attributes, $lineno, $tag);
     }
 
-    public function compile(Twig_Compiler $compiler)
+    public function compile(Compiler $compiler)
     {
         $compiler->addDebugInfo($this);
 
@@ -108,7 +110,7 @@ class CreatephpNode extends Twig_Node
         ;
     }
 
-    protected function compileTypeLoad(Twig_Compiler $compiler, $modelname)
+    protected function compileTypeLoad(Compiler $compiler, $modelname)
     {
         $compiler
             ->write('$this->env->getExtension(\'Midgard\\CreatePHP\\Extension\\Twig\\CreatephpExtension\')->createEntity(')
@@ -129,12 +131,12 @@ class CreatephpNode extends Twig_Node
      *
      * @return string|null get the variable name
      */
-    protected function findVariableName(Twig_Node $node)
+    protected function findVariableName(Node $node)
     {
         $name = null;
-        if ($node instanceof \Twig_Node_Expression_Name) {
+        if ($node instanceof NameExpression) {
             $name = $node->getAttribute('name');
-        } elseif ($node instanceof \Twig_Node_Expression_Constant) {
+        } elseif ($node instanceof ConstantExpression) {
             $name = $node->getAttribute('value');
         }
 

@@ -2,6 +2,7 @@
 
 namespace Test\Midgard\CreatePHP\Metadata;
 
+use Midgard\CreatePHP\Metadata\TypeNotFoundException;
 use Midgard\CreatePHP\RdfMapperInterface;
 use Midgard\CreatePHP\Metadata\RdfDriverArray;
 use Midgard\CreatePHP\Entity\Controller;
@@ -13,7 +14,7 @@ class RdfDriverArrayTest extends RdfDriverBase
      */
     private $driver;
 
-    public function setUp()
+    public function setUp(): void
     {
         $def = array(
             "Test\\Midgard\\CreatePHP\\Model" => array (
@@ -77,11 +78,10 @@ class RdfDriverArrayTest extends RdfDriverBase
         $this->assertTestNodetype($type);
     }
 
-    /**
-     * @expectedException \Midgard\CreatePHP\Metadata\TypeNotFoundException
-     */
     public function testLoadTypeForClassNodefinition()
     {
+        $this->expectException(TypeNotFoundException::class);
+
         $mapper = $this->createMock('Midgard\\CreatePHP\\RdfMapperInterface');
         $typeFactory = $this->getMockBuilder('Midgard\\CreatePHP\\Metadata\\RdfTypeFactory')->disableOriginalConstructor()->getMock();
         $type = $this->driver->loadType('Midgard\\CreatePHP\\Not\\Existing\\Class', $mapper, $typeFactory);

@@ -2,35 +2,39 @@
 
 namespace Test\Midgard\CreatePHP\Extension\Twig;
 
+use PHPUnit\Framework\TestCase;
+use Midgard\CreatePHP\Entity\PropertyInterface;
 use Midgard\CreatePHP\Extension\Twig\CreatephpExtension;
 use Midgard\CreatePHP\Extension\Twig\CreatephpNode;
-
+use Midgard\CreatePHP\Metadata\RdfDriverXml;
+use Midgard\CreatePHP\Metadata\RdfTypeFactory;
 use Test\Midgard\CreatePHP\Container;
 use Test\Midgard\CreatePHP\Model;
 use Test\Midgard\CreatePHP\Collection;
-use Midgard\CreatePHP\Metadata\RdfDriverXml;
-use Midgard\CreatePHP\Metadata\RdfTypeFactory;
-use Midgard\CreatePHP\Entity\PropertyInterface;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 use DOMDocument;
 use SimpleXMLElement;
 
-class CreatephpExtensionTest extends \PHPUnit_Framework_TestCase
+class CreatephpExtensionTest extends TestCase
 {
     /**
      * @var \Midgard\CreatePHP\RdfMapperInterface
      */
     private $mapper;
+
     /**
      * @var \Midgard\CreatePHP\Metadata\RdfTypeFactory
      */
     private $factory;
-    /** @var \Twig_Environment */
+
+    /** @var Environment */
     private $twig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        if (!class_exists('Twig_Environment')) {
+        if (!class_exists('Twig\Environment')) {
             $this->markTestSkipped('Twig is not installed.');
         }
 
@@ -39,8 +43,8 @@ class CreatephpExtensionTest extends \PHPUnit_Framework_TestCase
         $xmlDriver = new RdfDriverXml(array(__DIR__.'/../../Metadata/rdf-twig'));
         $this->factory = new RdfTypeFactory($this->mapper, $xmlDriver);
 
-        $loader = new \Twig_Loader_Filesystem(__DIR__.'/templates');
-        $this->twig = new \Twig_Environment($loader);
+        $loader = new FilesystemLoader(__DIR__.'/templates');
+        $this->twig = new Environment($loader);
         $this->twig->addExtension(new CreatephpExtension($this->factory));
     }
 
@@ -125,7 +129,7 @@ class CreatephpExtensionTest extends \PHPUnit_Framework_TestCase
 
         //assert the listing of children is correct
         $this->assertEquals(1, count($xml->ul));
-        $this->assertEquals(0, count($xml->ul['about']));
+        $this->assertFalse(isset($xml->ul['about']));
         $this->assertEquals(2, count($xml->ul->li));
         $this->assertEquals('dcterms:hasPart', $xml->ul['rel']);
         $this->assertEquals('dcterms:partOf', $xml->ul['rev']);

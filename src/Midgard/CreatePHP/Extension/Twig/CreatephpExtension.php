@@ -8,10 +8,10 @@
 
 namespace Midgard\CreatePHP\Extension\Twig;
 
-use Twig_Extension;
-use Twig_Environment;
-use Twig_SimpleFunction;
-use Twig_Error_Runtime;
+use Twig\Environment;
+use Twig\Error\RuntimeError;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 use Midgard\CreatePHP\NodeInterface;
 use Midgard\CreatePHP\Type\TypeInterface;
@@ -24,7 +24,7 @@ use Midgard\CreatePHP\Metadata\RdfTypeFactory;
  *
  * @package Midgard.CreatePHP
  */
-class CreatephpExtension extends Twig_Extension
+class CreatephpExtension extends AbstractExtension
 {
     protected $typeFactory;
     protected $environment;
@@ -37,7 +37,7 @@ class CreatephpExtension extends Twig_Extension
     /**
      * {@inheritdoc}
      */
-    public function initRuntime(Twig_Environment $environment)
+    public function initRuntime(Environment $environment)
     {
         $this->environment = $environment;
     }
@@ -49,19 +49,18 @@ class CreatephpExtension extends Twig_Extension
      */
     public function getTokenParsers()
     {
-        return array(
+        return [
             // {% createphp model %}
-            new CreatephpTokenParser($this->typeFactory),
-        );
+            new CreatephpTokenParser($this->typeFactory)
+        ];
     }
 
     public function getFunctions()
     {
-        return array(
-            new Twig_SimpleFunction('createphp_attributes', [$this, 'renderAttributes'], array('is_safe' => array('html'))),
-            new Twig_SimpleFunction('createphp_content', [$this, 'renderContent'], array('is_safe' => array('html'))),
-
-        );
+        return [
+            new TwigFunction('createphp_attributes', [$this, 'renderAttributes'], array('is_safe' => array('html'))),
+            new TwigFunction('createphp_content', [$this, 'renderContent'], array('is_safe' => array('html')))
+        ];
     }
 
     /**
@@ -81,7 +80,7 @@ class CreatephpExtension extends Twig_Extension
      *
      * @return string The html markup
      */
-    public function renderAttributes(NodeInterface $node, $attributesToSkip = array())
+    public function renderAttributes(NodeInterface $node, $attributesToSkip = [])
     {
         return $node->renderAttributes($attributesToSkip);
     }
@@ -108,13 +107,13 @@ class CreatephpExtension extends Twig_Extension
 
     public function createEntity($model)
     {
-        if (! is_object($model)) {
-            throw new Twig_Error_Runtime('The model to create the entity from must be a class');
+        if (!is_object($model)) {
+            throw new RuntimeError('The model to create the entity from must be a class');
         }
 
         $type = $this->typeFactory->getTypeByObject($model);
-        if (! $type instanceof TypeInterface) {
-            throw new Twig_Error_Runtime('Could not find metadata for '.get_class($model));
+        if (!($type instanceof TypeInterface)) {
+            throw new RuntimeError('Could not find metadata for ' . get_class($model));
         }
 
         return $type->createWithObject($model);

@@ -4,8 +4,9 @@ namespace Test\Midgard\CreatePHP;
 
 use Midgard\CreatePHP\RestService;
 use Midgard\CreatePHP\tests\MockWorkflow;
+use PHPUnit\Framework\TestCase;
 
-class RestServiceWorkflowTest extends \PHPUnit_Framework_TestCase
+class RestServiceWorkflowTest extends TestCase
 {
     public function test_get_registerWorkflow()
     {

@@ -5,8 +5,9 @@ use Midgard\CreatePHP\Entity\Controller;
 use Midgard\CreatePHP\Manager;
 use Midgard\CreatePHP\Widget;
 use Midgard\CreatePHP\RestService;
+use PHPUnit\Framework\TestCase;
 
-class ManagerTest extends \PHPUnit_Framework_TestCase
+class ManagerTest extends TestCase
 {
     /**
      * @var Manager
@@ -18,7 +19,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     private $factoryMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->factoryMock = $this->getMockBuilder('Midgard\\CreatePHP\\Metadata\\RdfTypeFactory')->disableOriginalConstructor()->getMock();
         $this->manager = new Manager(new MockMapper, $this->factoryMock);

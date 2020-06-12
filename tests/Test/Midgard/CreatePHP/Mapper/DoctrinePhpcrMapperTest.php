@@ -4,15 +4,16 @@ namespace Test\Midgard\CreatePHP\Mapper;
 
 
 use Midgard\CreatePHP\Mapper\DoctrinePhpcrOdmMapper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Uwe Jäger <uwej711@googlemail.com>
  */
-class DoctrinePhpcrMapperTest extends \PHPUnit_Framework_TestCase
+class DoctrinePhpcrMapperTest extends TestCase
 {
     protected $mapper;
 
-    public function setUp()
+    public function setUp(): void
     {
         $om = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
 

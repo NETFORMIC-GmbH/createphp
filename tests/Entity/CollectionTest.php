@@ -3,8 +3,9 @@ namespace Midgard\CreatePHP\tests;
 
 use Midgard\CreatePHP\Entity\Controller;
 use Midgard\CreatePHP\Entity\Collection;
+use PHPUnit\Framework\TestCase;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends TestCase
 {
     /**
      * @var \Midgard\CreatePHP\Type\TypeInterface
@@ -22,7 +23,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     private $mockMapper;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockMapper = new MockMapper;
         $this->parentController = new Controller($this->mockMapper);

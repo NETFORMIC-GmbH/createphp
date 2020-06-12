@@ -8,17 +8,16 @@
 
 namespace Midgard\CreatePHP\Extension\Twig;
 
-use Twig_Token;
-use Twig_TokenParser;
-
 use Midgard\CreatePHP\Metadata\RdfTypeFactory;
+use Twig\Token;
+use Twig\TokenParser\AbstractTokenParser;
 
 /**
  * A twig token parser for the createphp tag extension.
  *
  * @package Midgard.CreatePHP
  */
-class CreatephpTokenParser extends Twig_TokenParser
+class CreatephpTokenParser extends AbstractTokenParser
 {
     private $factory;
 
@@ -35,7 +34,7 @@ class CreatephpTokenParser extends Twig_TokenParser
         $this->factory = $factory;
     }
 
-    public function parse(Twig_Token $token)
+    public function parse(Token $token)
     {
         $stream = $this->parser->getStream();
 
@@ -43,26 +42,26 @@ class CreatephpTokenParser extends Twig_TokenParser
         $object = $this->parser->getExpressionParser()->parseExpression();
 
         $var = null;
-        if ($stream->test(Twig_Token::NAME_TYPE, 'as')) {
+        if ($stream->test(Token::NAME_TYPE, 'as')) {
             $stream->next();
-            if ($stream->test(Twig_Token::OPERATOR_TYPE, '=')) {
-                $stream->expect(Twig_Token::OPERATOR_TYPE, '=');
+            if ($stream->test(Token::OPERATOR_TYPE, '=')) {
+                $stream->expect(Token::OPERATOR_TYPE, '=');
             }
-            $var = $stream->expect(Twig_Token::STRING_TYPE)->getValue();
+            $var = $stream->expect(Token::STRING_TYPE)->getValue();
         }
 
         $noautotag = false;
-        if ($stream->test(Twig_Token::NAME_TYPE, 'noautotag')) {
+        if ($stream->test(Token::NAME_TYPE, 'noautotag')) {
             $noautotag = true;
             $stream->next();
         }
 
-        $stream->expect(Twig_Token::BLOCK_END_TYPE);
+        $stream->expect(Token::BLOCK_END_TYPE);
 
         $endtag = 'end'.$this->getTag();
-        $test = function(Twig_Token $token) use($endtag) { return $token->test($endtag); };
+        $test = function(Token $token) use($endtag) { return $token->test($endtag); };
         $body = $this->parser->subparse($test, true);
-        $stream->expect(Twig_Token::BLOCK_END_TYPE);
+        $stream->expect(Token::BLOCK_END_TYPE);
 
         return new CreatephpNode($body, $object, $var, !$noautotag, $token->getLine(), $this->getTag());
     }

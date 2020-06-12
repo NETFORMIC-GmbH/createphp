@@ -4,8 +4,9 @@ namespace Test\Midgard\CreatePHP;
 
 use Midgard\CreatePHP\RestService;
 use Midgard\CreatePHP\Entity\EntityInterface;
+use PHPUnit\Framework\TestCase;
 
-class RestServiceTest extends \PHPUnit_Framework_TestCase
+class RestServiceTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -37,7 +38,7 @@ class RestServiceTest extends \PHPUnit_Framework_TestCase
      */
     private $collection;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mapper = $this->createMock('Midgard\\CreatePHP\\RdfMapperInterface');
         $this->type = $this->createMock('Midgard\\CreatePHP\\Type\\TypeInterface');

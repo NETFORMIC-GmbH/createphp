@@ -3,8 +3,9 @@
 namespace Test\Midgard\CreatePHP\Mapper;
 
 use Midgard\CreatePHP\Mapper\DoctrineOrmMapper;
+use PHPUnit\Framework\TestCase;
 
-class DoctrineOrmMapperTest extends \PHPUnit_Framework_TestCase
+class DoctrineOrmMapperTest extends TestCase
 {
     public function provideIds()
     {
@@ -70,7 +71,7 @@ class DoctrineOrmMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($entity, $mapper->getBySubject($subject));
 
         $className = str_replace('\\', '-', get_class($entity));
-        $this->assertContains($className, $subject);
+        $this->assertStringContainsString($className, $subject);
     }
 }
 
